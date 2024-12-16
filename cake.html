@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blow The Candles</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #17051e;
+            color: #757479;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+
+        h1 {
+    position: absolute;
+    top: 20%; /* Adjust this value to position it precisely above the cake */
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Playfair Display', serif;
+    color: #b0aaa7;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: auto;
+    text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    font-weight: 600;
+    z-index: 10; /* Ensure it's above other elements */
+}
+        .cake {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #d1985e; /* Light beige for the cake */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            top: 50px;
+        }
+        .layer {
+            position: absolute;
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .layer:nth-child(1) {
+            background-color: #a45d17b4; /* Soft brown */
+            height: 60%;
+            bottom: 0;
+        }
+        .layer:nth-child(2) {
+            background-color: #a45d17; /* Soft pink */
+            height: 50%;
+            bottom: 60%;
+        }
+        .candle {
+            position: absolute;
+            width: 10px;
+            height: 30px;
+            background-color: #ff7f50; /* Coral color for candles */
+            bottom: 100%;
+        }
+        .flame {
+            position: absolute;
+            width: 5px;
+            height: 10px;
+            background-color: #ffd700; /* Gold for the flame */
+            border-radius: 50%;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.5s;
+        }
+        #nextButton {
+    position: fixed; /* Keeps the button fixed relative to the viewport */
+    bottom: 20px;    /* 20px from the bottom edge */
+    right: 20px;     /* 20px from the right edge */
+    padding: 10px 20px; /* Adds padding inside the button for better appearance */
+    background-color: #8c5fb2; /* Button color (blue) */
+    color: white;    /* Text color */
+    border: none;    /* Removes border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+  }
+
+  #nextButton:hover {
+    background-color: #6a4c93; /* Darker blue on hover */
+  }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+      
+    </style>
+</head>
+<body>
+    <h1>Blow The Candles</h1>
+<div class="cake">
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="candle" style="left: 15%;"><div class="flame"></div></div>
+    <div class="candle" style="left: 30%;"><div class="flame"></div></div>
+    <div class="candle" style="left: 50%;"><div class="flame"></div></div>
+    <div class="candle" style="left: 70%;"><div class="flame"></div></div>
+    <div class="candle" style="left: 85%;"><div class="flame"></div></div>
+</div>
+<button id="nextButton">Next</button>
+<script>
+    const candles = document.querySelectorAll('.candle');
+    const flames = document.querySelectorAll('.flame');
+    let blownOut = false;
+
+    async function setupAudio() {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+
+        const dataArray = new Uint8Array(analyser.fftSize);
+        function detectSound() {
+            analyser.getByteFrequencyData(dataArray);
+            const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+
+            // Threshold for blowing out flames
+            if (average > 40 && !blownOut) {
+                blowOutFlames();
+            }
+
+            requestAnimationFrame(detectSound);
+        }
+        detectSound();
+    }
+
+    function blowOutFlames() {
+        blownOut = true;
+        flames.forEach(flame => {
+            flame.style.opacity = '0'; // Hide the flames
+        });
+        // Wait for 5 seconds to show the blown-out candles
+       
+    }
+    setTimeout(() => {
+            redirectToNextPage();
+        }, 5000); // Adjust the delay (in milliseconds) as needed
+
+    setupAudio();
+
+    function createStars() {
+    for (let i = 0; i < 500; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        // Position stars outside the cake area
+        let topPosition = Math.random() * 100 + 'vh';
+        let leftPosition = Math.random() * 100 + 'vw';
+        
+        // Check if star is too close to the cake (centered at (50vw, 50vh))
+        while (Math.abs(parseFloat(topPosition) - 57) < 20 && Math.abs(parseFloat(leftPosition) - 56) < 20) {
+            topPosition = Math.random() * 100 + 'vh';
+            leftPosition = Math.random() * 100 + 'vw';
+        }
+
+        star.style.top = topPosition;
+        star.style.left = leftPosition;
+        star.style.animationDelay = Math.random() * 10 + 's';
+        document.body.appendChild(star);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', createStars);
+
+document.addEventListener('DOMContentLoaded', () => {
+        // Set a flag in localStorage to indicate cake page has been viewed
+        localStorage.setItem('cakePageViewed', 'true');
+        
+    });
+    // Optional: Automatically redirect after 5 seconds
+setTimeout(() => {
+    window.location.href = 'game10.html';
+}, 150000); // 150 seconds (2.5 minutes)
+
+// Redirect when the "Next" button is clicked
+document.getElementById('nextButton').addEventListener('click', () => {
+    window.location.href = 'game10.html';
+});
+
+
+  
+
+</script>
+
+</body>
+</html>

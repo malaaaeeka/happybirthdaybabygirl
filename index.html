@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Babygirl</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #17051e;
+            color: #757479;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(12, 12, 12, 0.015);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .piano {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            margin: 20px 0;
+        }
+        .key {
+            width: 50px;
+            height: 150px;
+            background: white;
+            border: 1px solid #bbb;
+            margin: 0 1px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .key:active {
+            background: #e4d8e4;
+        }
+        .black-key {
+            width: 30px;
+            height: 100px;
+            background: rgb(0, 0, 0);
+            position: absolute;
+            margin-left: -15px;
+            left: 30%;
+            z-index: 1;
+            cursor: pointer;
+            color: hsl(310, 4%, 69%);
+        }
+        .black-key:active {
+            background: #362b36;
+        }
+        .label {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgb(22, 9, 27);
+            font-size: 18px;
+        }
+        .correct {
+            color: rgb(34, 14, 39);
+            font-weight: bold;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        .music-note {
+            position: fixed;
+            font-size: 24px;
+            color: #23052c;
+            pointer-events: none;
+            animation: floatAndFade 2s ease-out forwards;
+            z-index: 2;
+        }
+
+        @keyframes floatAndFade {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--translateX), -100px) rotate(var(--rotation));
+            }
+            
+        }
+        .top-text h1{
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 28px;
+        color: rgb(255, 251, 254);
+        font-weight: bold;
+        z-index: 2; /* Ensure it's above the background text */
+    }
+
+    .top-text p{
+        position: fixed;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 15px;
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        z-index: 2; /* Ensure it's above the background text */
+
+    }
+
+    
+    button {
+            background: #17051e;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            
+        }
+
+        button:hover {
+            background: #8c61a3;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+    </style>
+</head>
+<body>
+     <!--<div class="top-text">
+        <h1>Enter The Password </h1>
+         <p>h a 1 4 f g i e j 9 k l 10 d</p>
+     </div>-->
+    <div class="container">
+        <h1></h1>
+        <div class="piano" id="piano">
+            <!-- White keys -->
+            <div class="key" data-note="2.mp3" data-char="a"><div class="label">a</div></div>
+            <div class="key" data-note="" data-char="b"><div class="label">b</div></div>
+            <div class="key" data-note="14.mp3" data-char="d"><div class="label">d</div></div>
+            <div class="key" data-note="8.mp3" data-char="e"><div class="label">e</div></div>
+            <div class="key" data-note="5.mp3" data-char="f"><div class="label">f</div></div>
+            <div class="key" data-note="6.mp3" data-char="g"><div class="label">g</div></div>
+            <div class="key" data-note="1.mp3" data-char="h"><div class="label">h</div></div>
+            <div class="key" data-note="7.mp3" data-char="i"><div class="label">i</div></div>
+            <div class="key" data-note="9.mp3" data-char="j"><div class="label">j</div></div>
+            <div class="key" data-note="11.mp3" data-char="k"><div class="label">k</div></div>
+            <div class="key" data-note="12.mp3" data-char="l"><div class="label">l</div></div>
+            <!-- Black keys -->
+            <div class="black-key" style="left: 40px;" data-note="3.mp3" data-char="1">1</div> 
+            <div class="black-key" style="left: 95px;" data-note="" data-char="2">2</div>
+            <div class="black-key" style="left: 150px;" data-note="" data-char="3">3</div>
+            <div class="black-key" style="left: 205px;" data-note="4.mp3" data-char="4">4</div>
+            <div class="black-key" style="left: 260px;" data-note="" data-char="5">5</div>
+            <div class="black-key" style="left: 310px;" data-note="" data-char="6">6</div>
+            <div class="black-key" style="left: 370px;" data-note="" data-char="7">7</div>
+            <div class="black-key" style="left: 420px;" data-note="" data-char="8">8</div>
+            <div class="black-key" style="left: 480px;" data-note="10.mp3" data-char="9">9</div>
+            <div class="black-key" style="left: 525px;" data-note="13.mp3" data-char="10">10</div>
+            <div class="black-key" style="left: 580px;" data-note="" data-char="11">11</div>      
+        </div>
+        <button id="login">login</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+      const correctPassword = "ha14fgiej9kl10d";
+const messageElement = document.getElementById('message');
+let enteredPassword = "";
+const musicNotes = ['♪', '♫', '♬', '♩', '♭', '♮'];
+
+const pianoKeys = document.querySelectorAll('.key, .black-key');
+
+function createStars() {
+    for (let i = 0; i < 500; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.animationDelay = Math.random() * 10 + 's';
+        document.body.appendChild(star);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', createStars);
+
+function createMusicNote(x, y) {
+    const note = document.createElement('div');
+    note.className = 'music-note';
+    note.textContent = musicNotes[Math.floor(Math.random() * musicNotes.length)];
+    note.style.left = x + 'px';
+    note.style.top = y + 'px';
+    
+    const randomX = (Math.random() - 0.5) * 100;
+    note.style.setProperty('--translateX', `${randomX}px`);
+    note.style.setProperty('--rotation', `${Math.random() * 360}deg`);
+    
+    document.body.appendChild(note);
+    
+    note.addEventListener('animationend', () => {
+        note.remove();
+    });
+}
+
+function playSound(note, event) {
+    if (note) {
+        const audio = new Audio(note);
+        audio.play().catch(error => {
+            console.error("Error playing sound:", error);
+        });
+    }
+
+    const key = event.target.closest('.key, .black-key');
+    const rect = key.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top;
+
+    for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+            createMusicNote(centerX, centerY);
+        }, i * 100);
+    }
+}
+
+pianoKeys.forEach(key => {
+    key.addEventListener('click', (event) => {
+        const note = key.getAttribute('data-note');
+        const char = key.getAttribute('data-char');
+        playSound(note, event);
+        enteredPassword += char;
+        console.log(enteredPassword);
+    });
+});
+
+document.getElementById('login').addEventListener('click', () => {
+    if (enteredPassword === correctPassword) {
+        // Detailed logging
+        console.log("Correct password entered");
+        console.log("Current URL:", window.location.href);
+        console.log("Attempting to redirect to: cake.html");
+        
+        try {
+            // Multiple redirection attempts
+            window.location.href = 'cake.html';
+            window.location.replace('cake.html');
+            document.location.href = 'cake.html';
+        } catch (error) {
+            console.error("Redirection error:", error);
+            alert("Redirection failed: " + error.message);
+        }
+    } else {
+        messageElement.textContent = "Incorrect Password!";
+        messageElement.classList.remove('correct');
+    }
+    enteredPassword = "";
+});
+
+
+    </script>
+    
+</body>
+</html>
